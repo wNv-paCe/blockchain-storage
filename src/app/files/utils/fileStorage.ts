@@ -41,7 +41,7 @@ export async function saveFile(fileName: string, content: string, accessKey: str
   localStorage.setItem(`${fileName}_${accessHash}`, encryptedContent);
 
   // Update file list
-  let fileList = getFileList(accessKey);
+  const fileList = getFileList(accessKey);
   if (!fileList.includes(fileName)) {
     fileList.push(fileName);
   }
@@ -65,7 +65,6 @@ export async function deleteFile(fileName: string, accessKey: string) {
   localStorage.removeItem(`${fileName}_${accessHash}`);
 
   // Update file list
-  let fileList = getFileList(accessKey);
-  fileList = fileList.filter(file => file !== fileName);
+  const fileList = getFileList(accessKey).filter(file => file !== fileName);
   saveFileList(fileList, accessKey);
 }
