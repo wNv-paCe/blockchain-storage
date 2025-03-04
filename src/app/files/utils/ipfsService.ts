@@ -3,8 +3,6 @@ import CryptoJS from "crypto-js";
 import { encryptText, decryptText } from "./encryption";
 
 const PINATA_GATEWAY = process.env.NEXT_PUBLIC_GATEWAY_URL;
-const PINATA_API_KEY = process.env.PINATA_API_KEY;
-const PINATA_SECRET_KEY = process.env.PINATA_SECRET_KEY;
 const PINATA_JWT = process.env.PINATA_JWT;
 
 // 生成随机 Access Key
@@ -36,7 +34,8 @@ async function fetchLatestIndexCID(accessKey: string): Promise<string | null> {
     }
 
     // **获取最新的 `index.json`**
-    const latestIndex = response.data.rows.reduce((prev: any, current: any) =>
+    type PinListRow = { ipfs_pin_hash: string; date_pinned: string };
+    const latestIndex = response.data.rows.reduce((prev: PinListRow, current: PinListRow) =>
       new Date(prev.date_pinned) > new Date(current.date_pinned) ? prev : current
     );
 
@@ -77,7 +76,8 @@ export async function getFileList(accessKey: string): Promise<{ fileName: string
     }
 
     try {
-      const fileList = JSON.parse(decryptedData);
+      type FileListItem = { fileName: string; cid: string };
+      const fileList: FileListItem[] = JSON.parse(decryptedData);
       console.log("Parsed file list:", fileList);
       return fileList;
     } catch (e) {
