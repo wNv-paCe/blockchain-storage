@@ -41,8 +41,12 @@ async function fetchLatestIndexCID(accessKey: string): Promise<string | null> {
 
     console.log("Latest ${indexFileName} CID:", latestIndex.ipfs_pin_hash);
     return latestIndex.ipfs_pin_hash;
-  } catch (error: any) {
-    console.error("Error fetching latest index CID:", JSON.stringify(error, null, 2));
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error fetching latest index CID:", error.message);
+    } else {
+      console.error("Error fetching latest index CID:", JSON.stringify(error, null, 2));
+    }
     return null;
   }
 }
@@ -222,8 +226,12 @@ export async function unpinFile(cid: string): Promise<boolean> {
       console.error(`Failed to unpin file: ${cid}`, unpinResponse.data);
       return false;
     }
-  } catch (error: any) {
-    console.error("Error unpinning file:", error.response?.data || error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error unpinning file:", error.message);
+    } else {
+      console.error("Unexpected error type:", error);
+    }
     return false;
   }
 }
