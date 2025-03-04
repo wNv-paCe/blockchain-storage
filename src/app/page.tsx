@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { generateAccessKey } from "./files/utils/fileStorage";
+import { generateAccessKey } from "./files/utils/ipfsService";
 
 export default function Home() {
   const [accessKey, setAccessKey] = useState("");
